@@ -1,4 +1,4 @@
-export default ({ archive, children, latest }) => {
+export default ({ archive, latest }) => {
   return (
     <div>
       <h1>News Archive</h1>

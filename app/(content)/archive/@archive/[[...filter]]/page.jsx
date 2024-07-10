@@ -15,7 +15,7 @@ export default ({ params }) => {
 
   if (
     (year && !getAvailableNewsYears().includes(+year)) ||
-    (month && !getAvailableNewsMonths.includes(+month))
+    (month && !getAvailableNewsMonths(year).includes(+month))
   ) {
     throw new Error("Invalid Filter");
   }

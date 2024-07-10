@@ -1,5 +1,10 @@
 import Link from "next/link";
-import styles from "./Header.module.css";
+import Navigation from "@components/Navigation/Navigation";
+
+const navigations = [
+  { children: "News", href: "/news" },
+  { children: "Archive", href: "/archive" },
+];
 
 export default () => {
   return (
@@ -9,12 +14,11 @@ export default () => {
       </div>
       <nav>
         <ul>
-          <li>
-            <Link href="/news">News</Link>
-          </li>
-          <li>
-            <Link href="/archive">Archive</Link>
-          </li>
+          {navigations.map((navigation, index) => (
+            <Navigation href={navigation.href} key={index}>
+              {navigation.children}
+            </Navigation>
+          ))}
         </ul>
       </nav>
     </header>
