@@ -1,44 +1,68 @@
-import { NEWS } from "@const/news";
+import sql from "better-sqlite3";
 
-export const getAllNews = () => {
-  return NEWS;
+const db = sql("data.db");
+
+export const getAllNews = async () => {
+  const news = db.prepare("SELECT * FROM news").all();
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  return news;
 };
 
-export const getLatestNews = () => {
-  return NEWS.slice(0, 3);
+export const getNewsItem = async (slug) => {
+  const newsItem = db.prepare("SELECT * FROM news WHERE slug = ?").get(slug);
+
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  return newsItem;
 };
 
-export const getAvailableNewsYears = () => {
-  return NEWS.reduce((years, news) => {
-    const year = new Date(news.date).getFullYear();
-    if (!years.includes(year)) {
-      years.push(year);
-    }
-    return years;
-  }, []).sort((a, b) => b - a);
+export const getLatestNews = async () => {
+  const latestNews = db
+    .prepare("SELECT * FROM news ORDER BY date DESC LIMIT 3")
+    .all();
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  return latestNews;
 };
 
-export const getAvailableNewsMonths = (year) => {
-  return NEWS.reduce((months, news) => {
-    const newsYear = new Date(news.date).getFullYear();
-    if (newsYear === +year) {
-      const month = new Date(news.date).getMonth();
-      if (!months.includes(month)) {
-        months.push(month + 1);
-      }
-    }
-    return months;
-  }, []).sort((a, b) => b - a);
+export const getAvailableNewsYears = async () => {
+  const years = db
+    .prepare("SELECT DISTINCT strftime('%Y', date) as year FROM news")
+    .all()
+    .map((year) => year.year);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  return years;
 };
 
-export const getNewsForYear = (year) => {
-  return NEWS.filter((news) => new Date(news.date).getFullYear() === +year);
+export const getAvailableNewsMonths = async (year) => {
+  return db
+    .prepare(
+      "SELECT DISTINCT strftime('%m', date) as month FROM news WHERE strftime('%Y', date) = ?"
+    )
+    .all(year)
+    .map((month) => month.month);
 };
 
-export const getNewsForYearAndMonth = (year, month) => {
-  return NEWS.filter((news) => {
-    const newsYear = new Date(news.date).getFullYear();
-    const newsMonth = new Date(news.date).getMonth() + 1;
-    return newsYear === +year && newsMonth === +month;
-  });
+export const getNewsForYear = async (year) => {
+  const news = db
+    .prepare(
+      "SELECT * FROM news WHERE strftime('%Y', date) = ? ORDER BY date DESC"
+    )
+    .all(year);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  return news;
+};
+
+export const getNewsForYearAndMonth = async (year, month) => {
+  const news = db
+    .prepare(
+      "SELECT * FROM news WHERE strftime('%Y', date) = ? AND strftime('%m', date) = ? ORDER BY date DESC"
+    )
+    .all(year, month);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  return news;
 };

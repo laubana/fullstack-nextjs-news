@@ -1,0 +1,19 @@
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.75);
+  height: 100%;
+  left: 0;
+  padding: 16px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.modal {
+  box-sizing: border-box;
+  height: 100%;
+  margin: auto;
+  padding: 16px;
+  max-width: 768px;
+  width: 100%;
+}

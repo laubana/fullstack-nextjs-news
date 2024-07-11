@@ -1,30 +1,33 @@
-"use client";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import Loader from "@components/Loader/Loader";
+import Modal from "@components/Modal/Modal";
+import { getNewsItem } from "@services/news";
 
-import { notFound, useRouter } from "next/navigation";
-import { NEWS } from "@const/news";
+const Image = async ({ slug }) => {
+  const newsItem = await getNewsItem(slug);
 
-export default ({ params }) => {
+  if (!newsItem) {
+    notFound();
+  } else {
+    return (
+      <img
+        className="fullscreen-image"
+        src={`/images/news/${newsItem.image}`}
+        alt={newsItem.title}
+      />
+    );
+  }
+};
+
+export default async ({ params }) => {
   const slug = params.slug;
 
-  const router = useRouter();
-
-  const news = NEWS.find((news) => news.slug === slug);
-
-  if (!news) {
-    notFound();
-  }
-
   return (
-    <>
-      <div className="modal-backdrop" onClick={router.back}>
-        <div className="modal">
-          <img
-            className="fullscreen-image"
-            src={`/images/news/${news.image}`}
-            alt={news.title}
-          />
-        </div>
-      </div>
-    </>
+    <Modal>
+      <Suspense fallback={<Loader />}>
+        <Image slug={slug} />
+      </Suspense>
+    </Modal>
   );
 };

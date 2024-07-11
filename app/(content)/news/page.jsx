@@ -1,13 +1,21 @@
+import { Suspense } from "react";
+import Loader from "@components/Loader/Loader";
 import NewsList from "@components/NewsList/NewsList";
-import { NEWS } from "@const/news";
+import { getAllNews } from "@services/news";
 
-export default () => {
-  const news = NEWS;
+const News = async () => {
+  const news = await getAllNews();
 
+  return <NewsList news={news} />;
+};
+
+export default async () => {
   return (
     <>
       <h1>News</h1>
-      <NewsList news={news} />
+      <Suspense fallback={<Loader />}>
+        <News />
+      </Suspense>
     </>
   );
 };

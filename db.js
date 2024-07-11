@@ -1,4 +1,7 @@
-export const NEWS = [
+const sql = require("better-sqlite3");
+const db = sql("data.db");
+
+const NEWS = [
   {
     id: "n1",
     slug: "will-ai-replace-humans",
@@ -45,3 +48,23 @@ export const NEWS = [
       "Landscape photography is a great way to capture the beauty of nature. It is also a great way to get outside and enjoy the great outdoors. So what are you waiting for? Get out there and start taking some pictures!",
   },
 ];
+
+function initDb() {
+  db.prepare(
+    "CREATE TABLE IF NOT EXISTS news (id INTEGER PRIMARY KEY, slug TEXT UNIQUE, title TEXT, content TEXT, date TEXT, image TEXT)"
+  ).run();
+
+  const { count } = db.prepare("SELECT COUNT(*) as count FROM news").get();
+
+  if (count === 0) {
+    const insert = db.prepare(
+      "INSERT INTO news (slug, title, content, date, image) VALUES (?, ?, ?, ?, ?)"
+    );
+
+    NEWS.forEach((news) => {
+      insert.run(news.slug, news.title, news.content, news.date, news.image);
+    });
+  }
+}
+
+initDb();

@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
-import { NEWS } from "@const/news";
+import { getNewsItem } from "@services/news";
 
-export default ({ params }) => {
+export default async ({ params }) => {
   const slug = params.slug;
 
-  const news = NEWS.find((news) => news.slug === slug);
+  const newsItem = await getNewsItem(slug);
 
-  if (!news) {
+  if (!newsItem) {
     notFound();
   }
 
@@ -14,8 +14,8 @@ export default ({ params }) => {
     <div>
       <img
         className="fullscreen-image"
-        src={`/images/news/${news.image}`}
-        alt={news.title}
+        src={`/images/news/${newsItem.image}`}
+        alt={newsItem.title}
       />
     </div>
   );

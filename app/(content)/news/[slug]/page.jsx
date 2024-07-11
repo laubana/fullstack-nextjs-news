@@ -1,26 +1,36 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { NEWS } from "@const/news";
+import { Suspense } from "react";
+import Loader from "@components/Loader/Loader";
+import { getNewsItem } from "@services/news";
 
-export default ({ params }) => {
+const News = async ({ slug }) => {
+  const newsItem = await getNewsItem(slug);
+
+  if (!newsItem) {
+    notFound();
+  } else {
+    return (
+      <article className="news-article">
+        <header>
+          <Link href={`/news/${newsItem.slug}/image`}>
+            <img src={`/images/news/${newsItem.image}`} alt={newsItem.title} />
+          </Link>
+          <h1>{newsItem.title}</h1>
+          <time dateTime={newsItem.date}>{newsItem.date}</time>
+        </header>
+        <p>{newsItem.content}</p>
+      </article>
+    );
+  }
+};
+
+export default async ({ params }) => {
   const slug = params.slug;
 
-  const news = NEWS.find((news) => news.slug === slug);
-
-  if (!news) {
-    notFound();
-  }
-
   return (
-    <article className="news-article">
-      <header>
-        <Link href={`/news/${news.slug}/image`}>
-          <img src={`/images/news/${news.image}`} alt={news.title} />
-        </Link>
-        <h1>{news.title}</h1>
-        <time dateTime={news.date}>{news.date}</time>
-      </header>
-      <p>{news.content}</p>
-    </article>
+    <Suspense fallback={<Loader />}>
+      <News slug={slug} />
+    </Suspense>
   );
 };
