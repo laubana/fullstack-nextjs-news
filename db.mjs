@@ -1,7 +1,8 @@
-const sql = require("better-sqlite3");
+import sql from "better-sqlite3";
+
 const db = sql("data.db");
 
-const NEWS = [
+const newsList = [
   {
     id: "n1",
     slug: "will-ai-replace-humans",
@@ -49,22 +50,42 @@ const NEWS = [
   },
 ];
 
-function initDb() {
-  db.prepare(
-    "CREATE TABLE IF NOT EXISTS news (id INTEGER PRIMARY KEY, slug TEXT UNIQUE, title TEXT, content TEXT, date TEXT, image TEXT)"
-  ).run();
+db.exec(`
+  CREATE TABLE IF NOT EXISTS news (
+    id INTEGER PRIMARY KEY,
+    slug TEXT UNIQUE,
+    title TEXT,
+    content TEXT,
+    date TEXT,
+    image TEXT
+  )`);
 
-  const { count } = db.prepare("SELECT COUNT(*) as count FROM news").get();
+const result = db.prepare("SELECT COUNT(*) as count FROM news").get();
 
-  if (count === 0) {
-    const insert = db.prepare(
-      "INSERT INTO news (slug, title, content, date, image) VALUES (?, ?, ?, ?, ?)"
+if (result.count === 0) {
+  const query = db.prepare(`
+    INSERT INTO news (
+      slug,
+      title,
+      content,
+      date,
+      image
+    )
+    VALUES (
+      ?,
+      ?,
+      ?,
+      ?,
+      ?
+    )`);
+
+  for (const newsItem of newsList) {
+    query.run(
+      newsItem.slug,
+      newsItem.title,
+      newsItem.content,
+      newsItem.date,
+      newsItem.image
     );
-
-    NEWS.forEach((news) => {
-      insert.run(news.slug, news.title, news.content, news.date, news.image);
-    });
   }
 }
-
-initDb();
