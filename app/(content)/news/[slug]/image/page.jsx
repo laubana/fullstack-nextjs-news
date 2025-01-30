@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+
 import { getNewsItem } from "@services/news";
 
 export default async ({ params }) => {
@@ -14,7 +15,7 @@ export default async ({ params }) => {
     <div>
       <img
         className="fullscreen-image"
-        src={`/images/news/${newsItem.image}`}
+        src={newsItem.imageUrl}
         alt={newsItem.title}
       />
     </div>

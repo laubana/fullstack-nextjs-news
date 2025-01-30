@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+
 import Loader from "@components/Loader/Loader";
 import NewsList from "@components/NewsList/NewsList";
 import { getAllNews } from "@services/news";

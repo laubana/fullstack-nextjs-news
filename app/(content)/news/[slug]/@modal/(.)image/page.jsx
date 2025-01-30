@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+
 import Loader from "@components/Loader/Loader";
 import Modal from "@components/Modal/Modal";
 import { getNewsItem } from "@services/news";
@@ -13,7 +14,7 @@ const Image = async ({ slug }) => {
     return (
       <img
         className="fullscreen-image"
-        src={`/images/news/${newsItem.image}`}
+        src={newsItem.imageUrl}
         alt={newsItem.title}
       />
     );

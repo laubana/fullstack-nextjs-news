@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+
 import Loader from "@components/Loader/Loader";
 import { getNewsItem } from "@services/news";
 
@@ -14,7 +15,7 @@ const News = async ({ slug }) => {
       <article className="news-article">
         <header>
           <Link href={`/news/${newsItem.slug}/image`}>
-            <img src={`/images/news/${newsItem.image}`} alt={newsItem.title} />
+            <img src={newsItem.imageUrl} alt={newsItem.title} />
           </Link>
           <h1>{newsItem.title}</h1>
           <time dateTime={newsItem.date}>{newsItem.date}</time>
