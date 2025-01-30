@@ -4,18 +4,16 @@ import Loader from "@components/Loader/Loader";
 import NewsList from "@components/NewsList/NewsList";
 import { getAllNews } from "@services/news";
 
-const News = async () => {
-  const news = await getAllNews();
-
-  return <NewsList news={news} />;
-};
+export const revalidate = 60;
 
 export default async () => {
+  const news = await getAllNews();
+
   return (
     <>
       <h1>News</h1>
       <Suspense fallback={<Loader />}>
-        <News />
+        <NewsList news={news} />
       </Suspense>
     </>
   );
