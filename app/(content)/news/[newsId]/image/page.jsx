@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { getNewsItem } from "@services/news";
 
 export default async ({ params }) => {
-  const slug = params.slug;
+  const newsId = params.newsId;
 
-  const newsItem = await getNewsItem(slug);
+  const newsItem = await getNewsItem(newsId);
 
   if (!newsItem) {
     notFound();

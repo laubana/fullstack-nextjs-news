@@ -5,8 +5,8 @@ import { Suspense } from "react";
 import Loader from "@components/Loader/Loader";
 import { getNewsItem } from "@services/news";
 
-const News = async ({ slug }) => {
-  const newsItem = await getNewsItem(slug);
+const News = async ({ newsId }) => {
+  const newsItem = await getNewsItem(newsId);
 
   if (!newsItem) {
     notFound();
@@ -14,7 +14,7 @@ const News = async ({ slug }) => {
     return (
       <article className="news-article">
         <header>
-          <Link href={`/news/${newsItem.slug}/image`}>
+          <Link href={`/news/${newsItem._id}/image`}>
             <img src={newsItem.imageUrl} alt={newsItem.title} />
           </Link>
           <h1>{newsItem.title}</h1>
@@ -27,11 +27,11 @@ const News = async ({ slug }) => {
 };
 
 export default async ({ params }) => {
-  const slug = params.slug;
+  const newsId = params.newsId;
 
   return (
     <Suspense fallback={<Loader />}>
-      <News slug={slug} />
+      <News newsId={newsId} />
     </Suspense>
   );
 };

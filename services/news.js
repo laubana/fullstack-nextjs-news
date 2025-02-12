@@ -1,24 +1,24 @@
-import { connect } from "@configs/db";
+import dbConfig from "@configs/dbConfig";
 import News from "@models/news";
 
 export const getAllNews = async () => {
-  await connect();
+  await dbConfig.connect();
 
   const existingNewsList = await News.find().lean();
 
   return existingNewsList;
 };
 
-export const getNewsItem = async (slug) => {
-  await connect();
+export const getNewsItem = async (newsId) => {
+  await dbConfig.connect();
 
-  const existingNewsItem = await News.findOne({ slug }).lean();
+  const existingNewsItem = await News.findById(newsId).lean();
 
   return existingNewsItem;
 };
 
 export const getLatestNews = async () => {
-  await connect();
+  await dbConfig.connect();
 
   const existingNewsList = await News.find().sort({ date: -1 }).limit(3).lean();
 
@@ -26,7 +26,7 @@ export const getLatestNews = async () => {
 };
 
 export const getAvailableNewsYears = async () => {
-  await connect();
+  await dbConfig.connect();
 
   const existingDates = await News.distinct("date").lean();
 
@@ -38,7 +38,7 @@ export const getAvailableNewsYears = async () => {
 };
 
 export const getAvailableNewsMonths = async (year) => {
-  await connect();
+  await dbConfig.connect();
 
   const existingDates = await News.find({
     date: new RegExp(`^${year}`),
@@ -54,7 +54,7 @@ export const getAvailableNewsMonths = async (year) => {
 };
 
 export const getNewsForYear = async (year) => {
-  await connect();
+  await dbConfig.connect();
 
   const existingNews = await News.find({ date: new RegExp(`^${year}`) })
     .sort({
@@ -66,7 +66,7 @@ export const getNewsForYear = async (year) => {
 };
 
 export const getNewsForYearAndMonth = async (year, month) => {
-  await connect();
+  await dbConfig.connect();
 
   const existingNews = await News.find({
     date: new RegExp(`^${year}-${month}`),

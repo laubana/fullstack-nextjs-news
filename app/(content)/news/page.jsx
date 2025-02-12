@@ -4,7 +4,7 @@ import Loader from "@components/Loader/Loader";
 import NewsList from "@components/NewsList/NewsList";
 import { getAllNews } from "@services/news";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default async () => {
   const news = await getAllNews();

@@ -5,8 +5,8 @@ import Loader from "@components/Loader/Loader";
 import Modal from "@components/Modal/Modal";
 import { getNewsItem } from "@services/news";
 
-const Image = async ({ slug }) => {
-  const newsItem = await getNewsItem(slug);
+const Image = async ({ newsId }) => {
+  const newsItem = await getNewsItem(newsId);
 
   if (!newsItem) {
     notFound();
@@ -22,12 +22,12 @@ const Image = async ({ slug }) => {
 };
 
 export default async ({ params }) => {
-  const slug = params.slug;
+  const newsId = params.newsId;
 
   return (
     <Modal>
       <Suspense fallback={<Loader />}>
-        <Image slug={slug} />
+        <Image newsId={newsId} />
       </Suspense>
     </Modal>
   );
